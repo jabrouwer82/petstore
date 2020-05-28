@@ -1,12 +1,7 @@
-lazy val api = project
+lazy val root = project
   .settings(
-    name := "api"
+    name := "pet-store"
   )
-
-// lazy val pets = project
-//   .settings(
-//     name := "pets",
-//   )
 
 ThisBuild / organization := "jacob.recess"
 ThisBuild / version := "0.0.1-SNAPSHOT"
