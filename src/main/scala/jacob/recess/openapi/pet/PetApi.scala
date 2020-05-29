@@ -124,14 +124,16 @@ object ExamplePetData {
     "Yes",
   )
 
-  val examplePets: List[Pet] = List(
-    Pet(
+  val examplePet2: Pet = Pet(
       UUID.fromString("76a53801-2c0d-48f0-b4a9-e23f8ec7c2a2"),
       "Sally",
       "dog",
       "No",
-    ),
+    )
+
+  val examplePets: List[Pet] = List(
     examplePet,
+    examplePet2,
   )
 
 }

@@ -14,6 +14,7 @@ import scala.concurrent.ExecutionContext.global
 import scala.io._
 import sttp.tapir.docs.openapi._
 import sttp.tapir.openapi.circe.yaml._
+import sttp.tapir.openapi._
 import sttp.tapir.swagger.http4s._
 
 object SwaggerService extends IOApp {
@@ -23,8 +24,11 @@ object SwaggerService extends IOApp {
     val server = for {
       configSrc <- IO(ConfigSource.default)
       apiConf = configSrc.at("swagger").loadOrThrow[ApiConfig]
+      petConf = configSrc.at("pet.api").loadOrThrow[ApiConfig]
+      customerConf = configSrc.at("customer.api").loadOrThrow[ApiConfig]
+      purchaseConf = configSrc.at("purchase.api").loadOrThrow[ApiConfig]
 
-      server <- getServer(apiConf)
+      server <- getServer(apiConf, petConf.uri.toString, customerConf.uri.toString, purchaseConf.uri.toString)
     } yield server
 
     server.attempt.unsafeRunSync() match {
@@ -42,7 +46,12 @@ object SwaggerService extends IOApp {
   }
 
   @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Nothing"))
-  def getServer(apiConf: ApiConfig): IO[ExitCode] =
+  def getServer(
+    apiConf: ApiConfig,
+    petUri: String,
+    customerUri: String,
+    purchaseUri: String,
+  ): IO[ExitCode] =
     BlazeServerBuilder[IO](global)
       .bindHttp(apiConf.port, apiConf.host)
       .withHttpApp(
@@ -51,7 +60,14 @@ object SwaggerService extends IOApp {
             PetApi.endpoints,
             CustomerApi.endpoints,
             PurchaseApi.endpoints,
-          ).foldK.toOpenAPI("Pet Store Combined Api", "0.1.0").toYaml
+          ).foldK
+            .toOpenAPI("Pet Store Combined Api", "0.1.0")
+            .servers(List(
+              Server(petUri).description("Pet Service"),
+              Server(customerUri).description("Customer Service"),
+              Server(purchaseUri).description("Purchase Service"),
+            ))
+            .toYaml
         ).routes.orNotFound
       )
       .resource

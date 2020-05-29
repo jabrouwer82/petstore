@@ -4,8 +4,11 @@ import jacob.recess.openapi._
 import eu.timepit.refined.pureconfig._
 import pureconfig._
 import pureconfig.generic.semiauto._
+import sttp.model.Uri
 
-final case class ApiConfig(host: String, port: Port)
+final case class ApiConfig(host: String, port: Port) {
+  val uri: Uri = Uri(host, port.value)
+}
 
 object ApiConfig {
   implicit val configReader: ConfigReader[ApiConfig] = deriveReader[ApiConfig]

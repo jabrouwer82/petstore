@@ -127,8 +127,7 @@ object ExampleCustomerData {
     "555-555-5555",
   )
 
-  val exampleCustomers: List[Customer] = List(
-    Customer(
+  val exampleCustomer2: Customer = Customer(
       UUID.fromString("fbddbc6b-ad52-440d-9265-ae854240a5f9"),
       "dsummers",
       "Daisy",
@@ -136,8 +135,11 @@ object ExampleCustomerData {
       "dsummers@email.com",
       "hunter2",
       "555-555-5555",
-    ),
+    )
+
+  val exampleCustomers: List[Customer] = List(
     exampleCustomer,
+    exampleCustomer2,
   )
 
 }

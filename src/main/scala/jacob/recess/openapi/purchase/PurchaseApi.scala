@@ -8,6 +8,7 @@ import java.util.UUID
 import sttp.model._
 import sttp.tapir._
 import sttp.tapir.json.circe._
+import jacob.recess.openapi.customer._
 
 object PurchaseApi {
 
@@ -118,7 +119,7 @@ object PurchaseApi {
           .example(ExamplePetData.examplePet)
       )
       .description(
-        """Fetches he given purchase, then fetches the associated pet from the Pet Service."""
+        """Fetches the given purchase, then fetches the associated pet from the Pet Service."""
       )
 
   @SuppressWarnings(
@@ -141,24 +142,26 @@ object PurchaseApi {
 object ExamplePurchaseData {
 
   val examplePurchase: Purchase = Purchase(
-    UUID.fromString("dbd426ad-c755-48f3-88e7-6c27ad2f8dc2"),
-    UUID.fromString("d96644cc-c4fa-41c1-b308-cea1f715215f"),
+    ExampleCustomerData.exampleCustomer.uuid,
+    ExamplePetData.examplePet.uuid,
     1,
     LocalDateTime.of(2020, 5, 17, 11, 55, 29),
     "Completed",
     true,
   )
 
-  val examplePurchases: List[Purchase] = List(
-    Purchase(
-      UUID.fromString("f29c14c9-f74d-46db-811e-0946a2e89bc5"),
-      UUID.fromString("d96644cc-c4fa-41c1-b308-cea1f715215f"),
+  val examplePurchase2: Purchase = Purchase(
+      ExampleCustomerData.exampleCustomer2.uuid,
+      ExamplePetData.examplePet2.uuid,
       1,
       LocalDateTime.of(2020, 5, 18, 14, 33, 12),
       "Denied",
       true,
-    ),
+    )
+
+  val examplePurchases: List[Purchase] = List(
     examplePurchase,
+    examplePurchase2,
   )
 
 }

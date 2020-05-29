@@ -17,7 +17,7 @@ import sttp.tapir.docs.openapi._
 import sttp.tapir.openapi.circe.yaml._
 import sttp.tapir.swagger.akkahttp._
 
-object CustomerStore extends IOApp {
+object CustomerSerice extends IOApp {
 
   @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Nothing"))
   def run(args: List[String]): IO[ExitCode] = {
