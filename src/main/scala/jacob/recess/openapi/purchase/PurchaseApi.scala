@@ -2,6 +2,7 @@ package jacob.recess.openapi.purchase
 
 import eu.timepit.refined.auto._
 import jacob.recess.openapi.purchase._
+import jacob.recess.openapi.pet._
 import java.time.LocalDateTime
 import java.util.UUID
 import sttp.model._
@@ -100,6 +101,26 @@ object PurchaseApi {
         """Saves the given Purchase to the database, only if there isn't already a Purchase with the same UUID."""
       )
 
+  @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Nothing"))
+  val getPetForPurchase: Endpoint[UUID, StatusCode, Pet, Nothing] =
+    endpoint
+      .get
+      .tag("purchase")
+      .in("purchase/pet" / path[UUID]("uuid"))
+      .errorOut(
+        statusCode
+          .description(StatusCode.NotFound, "There is no Purchase at the given UUID.")
+          .description(StatusCode.InternalServerError, "Something unknown went wrong.")
+      )
+      .out(
+        jsonBody[Pet]
+          .description("The pet associated with the given purchase uuid.")
+          .example(ExamplePetData.examplePet)
+      )
+      .description(
+        """Fetches he given purchase, then fetches the associated pet from the Pet Service."""
+      )
+
   @SuppressWarnings(
     Array(
       "org.wartremover.warts.Any",
@@ -112,6 +133,7 @@ object PurchaseApi {
     getAllPurchases,
     updatePurchase,
     createPurchase,
+    getPetForPurchase,
   )
 
 }

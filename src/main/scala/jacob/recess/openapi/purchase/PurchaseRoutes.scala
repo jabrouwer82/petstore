@@ -2,6 +2,7 @@ package jacob.recess.openapi.purchase
 
 import cats.effect._
 import jacob.recess.openapi.purchase._
+import jacob.recess.openapi.pet._
 import java.util.UUID
 import org.http4s._
 import sttp.model._
@@ -22,6 +23,9 @@ class PurchaseRoutes[F[_]: Sync: ContextShift: Http4sServerOptions](handler: Pur
   val createPurchase: ServerEndpoint[Purchase, StatusCode, Unit, Nothing, F] =
     PurchaseApi.createPurchase.serverLogic(handler.createPurchase)
 
+  val getPetForPurchase: ServerEndpoint[UUID, StatusCode, Pet, Nothing, F] =
+    PurchaseApi.getPetForPurchase.serverLogic(handler.getPetForPurchase)
+
   @SuppressWarnings(
     Array(
       "org.wartremover.warts.Any",
@@ -33,6 +37,7 @@ class PurchaseRoutes[F[_]: Sync: ContextShift: Http4sServerOptions](handler: Pur
     getAllPurchases,
     updatePurchase,
     createPurchase,
+    getPetForPurchase,
   ).toRoutes
 
 }

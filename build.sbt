@@ -25,6 +25,9 @@ val PureconfigVersion = "0.12.3"
 val RefinedVersion = "0.9.14"
 val Specs2Version = "4.9.3"
 val TapirVersion = "0.15.0"
+val SttpVersion = "2.1.5"
+val ZioVersion = "1.0.0-RC20"
+val ZioCatsVersion = "2.1.3.0-RC15"
 
 ThisBuild / libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % LogbackVersion,
@@ -40,6 +43,7 @@ ThisBuild / libraryDependencies ++= Seq(
   "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs" % TapirVersion,
   "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-http4s" % TapirVersion,
   "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-akka-http" % TapirVersion,
+  "com.softwaremill.sttp.client" %% "async-http-client-backend-cats" % SttpVersion,
   "eu.timepit" %% "refined" % RefinedVersion,
   "eu.timepit" %% "refined-cats" % RefinedVersion,
   "eu.timepit" %% "refined-pureconfig" % RefinedVersion,

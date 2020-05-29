@@ -33,7 +33,11 @@ object CustomerStore extends IOApp {
       server <- getServer(apiConf, customerRepo)(system)
     } yield server
 
-    server.use(_ => IO(StdIn.readLine())).as(ExitCode.Success).attempt.unsafeRunSync() match {
+    server
+      .use(_ => IO(StdIn.readLine()))
+      .as(ExitCode.Success)
+      .attempt
+      .unsafeRunSync() match {
       case Left(e) =>
         IO {
           println("***** Something went wrong *****")

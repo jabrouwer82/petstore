@@ -16,6 +16,8 @@ import scala.io._
 import sttp.tapir.docs.openapi._
 import sttp.tapir.openapi.circe.yaml._
 import sttp.tapir.swagger.http4s._
+import jacob.recess.openapi._
+import sttp.model.Uri
 
 object PurchaseStore extends IOApp {
 
@@ -24,11 +26,12 @@ object PurchaseStore extends IOApp {
     val server = for {
       configSrc <- IO(ConfigSource.default)
       apiConf = configSrc.at("purchase.api").loadOrThrow[ApiConfig]
+      petApiConf = configSrc.at("pet.api").loadOrThrow[ApiConfig]
       dbConf = configSrc.at("purchase.database").loadOrThrow[DbConfig]
 
       _ <- new FlywayMigrator().migrate(dbConf.url, dbConf.user, dbConf.pass)
 
-      purchaseRepo = getHandler(getRepo(dbConf))
+      purchaseRepo = getHandler(getRepo(dbConf), petApiConf.host, petApiConf.port)
       server <- getServer(apiConf, purchaseRepo)
     } yield server
 
@@ -52,8 +55,8 @@ object PurchaseStore extends IOApp {
       new DoobieContext.Postgres(Literal),
     )
 
-  def getHandler(repo: PurchaseRepo[IO]): PurchaseHandler[IO] =
-    new PurchaseHandler(repo)
+  def getHandler(repo: PurchaseRepo[IO], petHost: String, petPort: Port): PurchaseHandler[IO] =
+    new PurchaseHandler(repo, Uri.apply(petHost, petPort))
 
   @SuppressWarnings(Array("org.wartremover.warts.Any", "org.wartremover.warts.Nothing"))
   def getServer(apiConf: ApiConfig, handler: PurchaseHandler[IO]): IO[ExitCode] =
