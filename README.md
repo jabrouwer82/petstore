@@ -1,6 +1,10 @@
 # A partial microserviced pet store implementation
 
-This was done as a very simplified demo to show to coworkers how tapir could
-dramatically improve scala microservices and documentation at the same time.
+Requires postgres installed and running, start multiple sbt processes and
+select the appropriate service main class. Visit localhost:53251/docs to
+try out the swagger ui once you have the other services started.
 
-I also used it as an excuse to dip my toes into refined, quill, and pureconfig.
+This app was built to demo to coworkers how tapir could simplify microservice
+interactions and documentation at the same time.
+
+It was also an excuse to experiment with libraries like quill and refined.
